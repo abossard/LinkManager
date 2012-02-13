@@ -1,0 +1,14 @@
+{% extends "base_accounts_form.html" %}
+
+{% block iferror %}
+Your username and password didn't match. <a href="{% url password_reset %}">Forgot password?</a>
+{% endblock %}
+{% block buttontext %}Login{% endblock %}
+
+{% block title %}Login{% endblock %}
+
+{% block postform %}
+<hr/>
+You can also login via <a href="{% url openid_login %}?next={{ next }}">OpenID</a><br />
+Of you don't have a login yet, <a href="{% url signup %}">Signup</a>.
+{% endblock %}

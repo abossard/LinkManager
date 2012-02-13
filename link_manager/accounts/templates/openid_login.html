@@ -1,0 +1,66 @@
+{% extends "base_accounts_form.html" %} 
+{%block buttontext%}Login{%endblock%}
+{% block title %}Open ID Login{% endblock %}
+{% block head %}
+{{ block.super }}
+<script type="text/javascript">
+	$(document).ready(function() {
+	    /*openid.init('openid_identifier');*/
+	    $('#id_openid_username_container').hide();
+	    $('#choices a').hover(function(){
+		    //window.alert($(this).attr('rel'));
+		    var openid_url = $(this).attr('rel');
+		    if(openid_url.match("{username}")) {
+		    	$('#id_openid_url').val(openid_url.replace('{username}', $('#id_openid_username').val()));
+		    }else {
+		    	$('#id_openid_url').val(openid_url);
+		    }
+	    });
+	    $('#choices a').click(function(){
+	    	$('#choices a.selected').removeClass('selected');
+		    $(this).addClass('selected');
+		    var openid_url = $(this).attr('rel');
+		    if(openid_url.match("{username}")) {
+		    	$('#id_openid_username_container').show();
+		    	$('#id_openid_username_label').text($('#id_openid_username').attr('alt').replace('{title}',$(this).attr('title')));
+		    } else {
+			    $('#id_openid_url').val();
+			    $('#form').submit();
+		    }
+	    });
+	    $('#id_openid_username').keyup(function(event) {
+	    	var template = $('#choices a.selected').attr('rel');
+	    	$('#id_openid_url').val(template.replace('{username}', $(this).val()));
+    	});
+	});
+	</script>
+{% endblock %}
+
+{%block preform%}
+
+<div id="choices" >
+	<h3>Choose your login provider</h3>
+	<a title="Google" id="google" rel="https://www.google.com/accounts/o8/id">Google</a>
+	<a title="Yahoo" id="yahoo" rel="http://me.yahoo.com">Yahoo</a>
+	<a title="AOL" id="aol" rel="http://openid.aol.com/{username}">AOL</a>
+	<a title="myOpenID" id="myopenid" rel="http://myopenid.com/{username}">myOpenId</a>
+	
+</div>
+<div id="id_openid_username_container" class="clear">
+<label id="id_openid_username_label" for="id_openid_username">Username</label>
+<input type="text" name="openid_username" id="id_openid_username"  class="span3" alt="{title} Username"/> 
+<br/>
+<button type="submit" class="btn">Login</button>
+</div>
+<hr />
+<h3>or manually enter a Open ID Url:</h3>
+{%endblock%}
+{%block postform%}
+<hr />
+back to the
+<a href="{% url login %}">regular Login</a>
+{%endblock%} 
+{% block endbody %}
+{{ block.super }}
+
+{% endblock %}

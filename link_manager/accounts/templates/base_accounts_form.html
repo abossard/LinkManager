@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block content %}
+
+<form method="post" action="" class="well" id="{%block formid%}form{%endblock%}">{% csrf_token %}
+<fieldset>
+<legend>{% block title %}{% endblock %}</legend>
+{{ form.non_field_errors }}
+
+{% if form.errors %}
+{% block iferror %}
+{% endblock %}
+
+{% endif %}
+
+{% block preform %}
+{% endblock %}
+{% for field in form.visible_fields %}
+{{field.label_tag}}{% if field.help_text %} ({{ field.help_text }}){% endif %}
+{{field|add_class:"span3"}} 
+{%if field.errors%}
+<span class="error" >
+    {% for error in field.errors %}
+    {{error}}
+    {% endfor %}
+</span>
+{%endif%}
+<br/>
+{% if not forloop.last %}
+<br/>
+{% endif %}
+{% endfor %}
+<div class="form-actions">
+    <button type="submit" class="btn btn-primary">{% block buttontext %}Save{% endblock %}</button>
+    <button type="reset" class="btn">Cancel</button>
+</div>
+{% for hidden in form.hidden_fields %}
+{{ hidden }}
+{% endfor %}
+{% block postform%}
+{% endblock %}
+</form>
+</fieldset>
+{% endblock %}

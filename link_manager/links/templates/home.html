@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load linksfilter %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Link Manager <small>helps you manage your links</small></h1>
+  </div>
+{% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-info {{ message.tags }}">
+    <a class="close" data-dismiss="alert">&times;</a>
+      <strong>Read:</strong> {{ message }}
+    </div>
+    {% endfor %}
+{% endif %}
+<div class="row">
+<div class="span7">
+<ul class="tabs nav nav-tabs">
+  <li class="active"><a href="#unsaved" data-toggle="tab">Unsaved</a></li>
+  <li><a href="#saved" data-toggle="tab">Saved</a></li>
+</ul>
+
+<div id="myTabContent" class="tab-content">
+            <div class="tab-pane fade in active" id="unsaved">
+		{% include "sites_list.html" with credentials=unsaved_credentials %}
+
+           </div>
+            <div class="tab-pane fade" id="saved">
+		{% include "sites_list.html" with credentials=saved_credentials %}
+
+            </div>
+         </div>
+
+
+<form action="." method="post" class="form-vertical">{% csrf_token %}
+<fieldset>
+<legend>Insert new data
+</legend>
+<label>Insert new data to parse</label>
+<textarea id="content" class="span6" name="content" rows=10 cols=80>
+</textarea><br/>
+<input type="submit" class="btn btn-primary"/>
+<input type="reset" class="btn"/>
+</fieldset>
+</form>
+<a href="/cleanup" class="btn btn-danger icon-exclamation-sign">clean up</a>
+
+</div>
+<div class="span5">
+<h3>Proxies</h3>
+<ul class="unstyled">
+{% for proxy in proxies %}
+   <li>
+       {{proxy.hostname}} ({{proxy.works}}, {{proxy.lag}}ms, {{proxy.update_on|prettydate}})
+   </li>
+{% endfor %}
+    </ul>
+
+</div>
+{% endblock %}
+

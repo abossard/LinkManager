@@ -1,0 +1,37 @@
+{% load linksfilter %}
+{% regroup credentials by site as site_list %}
+
+{% for site_list_item in site_list %}
+{% with site=site_list_item.grouper %}
+
+<h5>{{site}}  <small> <a href="/ignore_site/{{site.id}}" class="">ignore</a></small></h5>
+<table class="table table-striped">
+{% for credential in site_list_item.list %}
+<tr><td class="span2">
+<a class="sitelink" title="Checked {{credential.update_on|prettydate}}" data-content="Lag: {{credential.last_lag}} ms<br/> Last Title: {{ credential.last_title }}" href="{{ credential }}" >
+{% if credential.works %}
+<span class="label label-success">{{ credential.last_http_code }}</span>
+{% else %}
+<span class="label ">{{ credential.last_http_code }}</span>
+{% endif %}
+{{ credential.username }}
+</a></td>
+<td class="span3"><code>{{ credential.username }}:{{ credential.password }}</code></td>
+<td class="span2">
+{% if credential.keeper %}
+<span class="label label-success">saved</span>
+{% else %}
+<span class="label label-warning">unsaved</span>
+{% endif %}
+
+<a class="" href="/keep/{{credential.id}}">{% if credential.keeper %}unkeep{% else %}keep{% endif %}</a>
+
+</td>
+<!--
+<td>({{credential.works}}, {{credential.update_on|prettydate}}, {{credential.last_lag}} ms, {{ credential.last_http_code }}, {{ credential.last_title }})</td>
+-->
+</tr>
+{% endfor %}
+</table>
+{% endwith %}
+{% endfor %}

@@ -1,0 +1,9 @@
+{% extends "accounts/base_accounts_form.html" %}
+
+{% block preform %}
+<p>Create your free account or directly <a href="{% url openid_login %}">login with OpenID</a></p>
+{% endblock %}
+
+{% block title %}Sign up with us!{% endblock %}
+
+{% block buttontext %}Sign up{% endblock %}
