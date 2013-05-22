@@ -5,8 +5,11 @@
 {% with site=site_list_item.grouper %}
 
 <h5>{{site}}  <small> <a href="/ignore_site/{{site.id}}" class="">ignore</a></small></h5>
+{% regroup site_list_item.list by last_title as credential_list %}
+{% for credential_list_item in credential_list %}
+<h6><small>{{credential_list_item.grouper}}</small></h6>
 <table class="table table-striped">
-{% for credential in site_list_item.list %}
+{% for credential in credential_list_item.list %}
 <tr><td class="span2">
 <a class="sitelink" title="Checked {{credential.update_on|prettydate}}" data-content="Lag: {{credential.last_lag}} ms<br/> Last Title: {{ credential.last_title }}" href="{{ credential }}" >
 {% if credential.works %}
@@ -16,7 +19,7 @@
 {% endif %}
 {{ credential.username }}
 </a></td>
-<td class="span3"><code>{{ credential.username }}:{{ credential.password }}</code></td>
+<td class="span1"><code>{{ credential.username }}:{{ credential.password }}</code></td>
 <td class="span2">
 {% if credential.keeper %}
 <span class="label label-success">saved</span>
@@ -33,5 +36,6 @@
 </tr>
 {% endfor %}
 </table>
+{% endfor %}
 {% endwith %}
 {% endfor %}
